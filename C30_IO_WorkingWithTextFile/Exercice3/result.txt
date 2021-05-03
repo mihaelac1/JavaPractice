@@ -1,0 +1,5 @@
+The shortest word -> ap
+The longest word -> banane
+First word alphabetic order -> ap
+Last word alphabetic order -> mere
+Total nb of words -> 6
