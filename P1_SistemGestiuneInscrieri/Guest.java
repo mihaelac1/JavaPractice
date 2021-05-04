@@ -1,8 +1,9 @@
 package JavaPracticeGitHub.P1_SistemGestiuneInscrieri;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.Objects;
 
-public class Guest {
+public class Guest implements Serializable {
     //Fields
     private String lastName;
     private String firstName;
@@ -61,7 +62,10 @@ public class Guest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Guest guest = (Guest) o;
-        return Objects.equals(lastName, guest.lastName) && Objects.equals(firstName, guest.firstName) && Objects.equals(email, guest.email) && Objects.equals(phoneNumber, guest.phoneNumber);
+        return Objects.equals(lastName.toLowerCase(), guest.lastName.toLowerCase())
+                && Objects.equals(firstName.toLowerCase(), guest.firstName.toLowerCase())
+                && Objects.equals(email.toLowerCase(), guest.email.toLowerCase())
+                && Objects.equals(phoneNumber.toLowerCase(), guest.phoneNumber.toLowerCase());
     }
 
     @Override

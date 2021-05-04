@@ -1,15 +1,21 @@
 package JavaPracticeGitHub.P1_SistemGestiuneInscrieri;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-public class MainAutomaticTesting {
+public class MainAutomaticTesting implements Serializable {
 
     private static GuestsList devMindEventList;
     private static int maxParticipants;
 
     private static File file = new File("./src/Homework/Proiect1_SistemGestiuneInscrieri/ScenariuTestProiect.txt");
     private static Scanner inputScanner;
+
     static {
         try {
             inputScanner = new Scanner(file);
@@ -21,6 +27,16 @@ public class MainAutomaticTesting {
     public static void help() {
         HandleUserInputAutomatic.help();
     }
+
+//    public static void addBackup(Guest guest){
+//        String lastName = guest.getLastName();
+//        String firstName = guest.getFirstName();
+//        String email = guest.getEmail();
+//        String phoneNumber = guest.getPhoneNumber();
+//        Guest newGuest = new Guest(lastName, firstName, email, phoneNumber);
+//        devMindEventList.add(newGuest);
+//
+//    }
 
     public static void add() {
         HandleUserInputAutomatic.inputAdd();
@@ -134,7 +150,7 @@ public class MainAutomaticTesting {
                         devMindEventList.update(indexToUpdate, option, lastName);
                         System.out.println("Numele de familie modificat cu succes!");
                     }
-                  //  return;
+                    //  return;
                 }
                 case 2 -> {
                     String firstName = HandleUserInputAutomatic.inputFirstName(inputScanner);
@@ -142,7 +158,7 @@ public class MainAutomaticTesting {
                         devMindEventList.update(indexToUpdate, option, firstName);
                         System.out.println("Prenumele modificat cu succes!");
                     }
-                  //  return;
+                    //  return;
                 }
                 case 3 -> {
                     String email = HandleUserInputAutomatic.inputEmail(inputScanner);
@@ -150,7 +166,7 @@ public class MainAutomaticTesting {
                         devMindEventList.update(indexToUpdate, option, email);
                         System.out.println("Email modificat cu succes!");
                     }
-                  //  return;
+                    //  return;
                 }
                 case 4 -> {
                     String phoneNumber = HandleUserInputAutomatic.inputPhoneNumber(inputScanner);
@@ -158,7 +174,7 @@ public class MainAutomaticTesting {
                         devMindEventList.update(indexToUpdate, option, phoneNumber);
                         System.out.println("Numarul de telefon modificat cu succes!");
                     }
-                   // return;
+                    // return;
                 }
             }
         }
@@ -207,10 +223,20 @@ public class MainAutomaticTesting {
         System.out.println("Aplicatia se inchide...");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         maxParticipants = HandleUserInputAutomatic.inputMaxParticipants(inputScanner);
         HandleUserInputAutomatic.nextLine(inputScanner);
         devMindEventList = new GuestsList(maxParticipants);
+
+        try{
+            List<GuestsList> backupList = GuestsList.readFromBinaryFile();
+            for (Guest g : backupList.get(0).getAllParticipantsList())
+                devMindEventList.add(g);
+
+        } catch(IOException e){
+            System.out.println("Nu exista o baza de backup.");
+        }
+
 
         while (true) {
             String command = HandleUserInputAutomatic.waitCommand(inputScanner);
@@ -230,11 +256,16 @@ public class MainAutomaticTesting {
                 case "search" -> search();
                 case "quit" -> {
                     quit();
+                    List<GuestsList> backup = new ArrayList<>();
+                    backup.add(devMindEventList);
+                    GuestsList.writeToBinaryFile(backup);
                     return;
                 }
                 default -> HandleUserInput.unknownCommand();
             }
             System.out.println();
         }
+
+
     }
 }

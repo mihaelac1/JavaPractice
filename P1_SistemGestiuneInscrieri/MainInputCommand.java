@@ -1,6 +1,6 @@
 package JavaPracticeGitHub.P1_SistemGestiuneInscrieri;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class MainInputCommand {
 

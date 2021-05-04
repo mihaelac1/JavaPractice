@@ -1,15 +1,50 @@
 package JavaPracticeGitHub.P1_SistemGestiuneInscrieri;
 
-import java.util.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-public class GuestsList {
+public class GuestsList implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private final int maxParticipants;
     //only one list for waitlist and guest
-    private ArrayList<Guest> allParticipantsList;
+    private List<Guest> allParticipantsList;
 
     public GuestsList(int maxParticipants) {
         this.maxParticipants = maxParticipants;
         this.allParticipantsList = new ArrayList<Guest>();
+    }
+
+    public static void writeToBinaryFile(List<GuestsList> data) throws IOException {
+        try(ObjectOutputStream binaryFileOut = new ObjectOutputStream(
+                new BufferedOutputStream(new FileOutputStream("src/Homework/Proiect1_SistemGestiuneInscrieri/guestList.dat")))) {
+            binaryFileOut.writeObject(data);
+        }
+    }
+
+    public static List<GuestsList> readFromBinaryFile() throws IOException {
+        List<GuestsList> data = null;
+
+        try(ObjectInputStream binaryFileIn = new ObjectInputStream(
+                new BufferedInputStream(new FileInputStream("src/Homework/Proiect1_SistemGestiuneInscrieri/guestList.dat")))) {
+            data = (List<GuestsList>) binaryFileIn.readObject();
+        } catch (ClassNotFoundException e) {
+            System.out.println("A class not found exception: " + e.getMessage());
+        }
+
+        return data;
+    }
+
+
+    public List<Guest> getAllParticipantsList() {
+        return allParticipantsList;
+    }
+
+    public void setAllParticipantsList(List<Guest> allParticipantsList) {
+        this.allParticipantsList = allParticipantsList;
     }
 
     // return -1 - the guest is already in the list,
